@@ -1,19 +1,15 @@
 type Props = {
-  title: string;
+  title?: string;
   children: React.ReactNode;
 };
 
-export function PageWrapper({
-  title,
-  children,
-}: Props) {
+export function PageWrapper({ title, children }: Props) {
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">
-        {title}
-      </h1>
-
-      {children}
+    <div className="px-1 grid grid-cols-1 space-y-8">
+      {title && (
+        <h1 className="text-2xl font-semibold text-[#2f2623]">{title}</h1>
+      )}
+      <div>{children}</div>
     </div>
   );
 }

@@ -1,50 +1,19 @@
+import { BadgeCheck, Infinity } from "lucide-react";
 import Image from "next/image";
 
 const features = [
   {
-    icon: (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={1.5}
-        className="w-5 h-5"
-      >
-        <circle cx="12" cy="12" r="10" />
-        <path d="M12 6v6l4 2" />
-      </svg>
-    ),
+    icon: <BadgeCheck size={26}></BadgeCheck>,
     title: "Berlaku selamanya",
     desc: "Tanpa biaya tambahan",
   },
   {
-    icon: (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={1.5}
-        className="w-5 h-5"
-      >
-        <path d="M8 12h8M12 8l4 4-4 4" />
-        <path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0" />
-      </svg>
-    ),
+    icon: <Infinity size={26}></Infinity>,
     title: "Link tamu unlimited",
     desc: "Undang tanpa batas",
   },
   {
-    icon: (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={1.5}
-        className="w-5 h-5"
-      >
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-    ),
+    icon: <Infinity size={26}></Infinity>,
     title: "Tanpa watermark",
     desc: "Hasil undangan bersih",
   },
@@ -101,19 +70,19 @@ export default function HeroSection() {
           <div className="flex flex-wrap gap-x-6 gap-y-3">
             {features.map((f) => (
               <div key={f.title} className="flex items-center gap-2.5">
-                <span className="text-[#c47e6e]">{f.icon}</span>
+                <span className="text-pink-primary rounded-full bg-bg-pink p-4">{f.icon}</span>
                 <div>
-                  <p className="text-lg font-medium text-[#1a1a1a]">
+                  <p className="text-md font-medium text-[#1a1a1a]">
                     {f.title}
                   </p>
-                  <p className="text-lg text-[#737373]">{f.desc}</p>
+                  <p className="text-md text-[#737373]">{f.desc}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
         {/* RIGHT IMAGE */}
-       <div className="relative w-full md:w-[50%] min-h-[200px] md:min-h-0 z-10">
+        <div className="relative w-full md:w-[50%] min-h-[200px] md:min-h-0 z-10">
           {/* IMAGE */}
           <img
             src="/images/hero-dashboard.png"
@@ -122,7 +91,7 @@ export default function HeroSection() {
           />
 
           {/* ELLIPSE EFFECT */}
-          <div className="absolute left-[-100px] top-[-50px] h-[520px] w-[320px] -translate-y-1/2 rounded-full bg-[#f5efeb] blur-3xl" />
+          <div className="absolute left-[-100px] top-[-50px] bottom-[-80px] h-[520px] w-[320px] -translate-y-1/2 rounded-full bg-[#F9F3F2] blur-3xl" />
 
           {/* SOFT FADE */}
           <div className="absolute left-0 top-0 h-full w-40 bg-gradient-to-r from-[#f5efeb] to-transparent" />

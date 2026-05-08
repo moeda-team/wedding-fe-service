@@ -1,13 +1,15 @@
 import HeroSection from "@/components/dashboard/hero";
-import { FeatureBadge } from "@/components/ui/feature-badge";
-import { StatsCard } from "@/components/ui/stats-card";
-import { TemplateCard } from "@/components/ui/template-card";
+import { PageWrapper } from "@/components/layout/page-wrapper";
+import { Card2 } from "@/components/ui/card-2";
 import {
-  ChevronRight,
-  CircleDollarSign,
-  FileText,
-  MessageSquare,
-} from "lucide-react";
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { StatsCard } from "@/components/ui/stats-card";
+import { Archive, CheckCircle, ChevronRight, List } from "lucide-react";
 
 export default function DashboardPage() {
   const templates = [
@@ -15,87 +17,127 @@ export default function DashboardPage() {
       id: 1,
       title: "Luxury Wedding",
       description: "Elegant wedding invitation",
-      image: "/images/hero-dashboard.png",
+      image: "/images/template-1.png",
     },
     {
       id: 2,
       title: "Minimal Floral",
       description: "Soft and modern floral style",
-      image:
-        "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=1200&auto=format&fit=crop",
+      image: "/images/template-2.png",
     },
     {
       id: 3,
       title: "Classic White",
       description: "Simple classy invitation",
-      image:
-        "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200&auto=format&fit=crop",
+      image: "/images/template-3.png",
     },
     {
       id: 4,
       title: "Romantic Gold",
       description: "Luxury gold themed design",
-      image:
-        "https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=1200&auto=format&fit=crop",
+      image: "/images/template-4.png",
+    },
+    {
+      id: 5,
+      title: "Rustic Bloom",
+      description: "Warm botanical aesthetics",
+      image: "/images/template-5.png",
     },
   ];
 
   return (
-    <div className="space-y-6">
-      {/* HERO SECTION */}
+    <PageWrapper title="">
       <HeroSection />
+
       {/* STATS */}
-      <section className="grid gap-5 md:grid-cols-3">
+      <section className="grid gap-4 md:grid-cols-3 mt-8">
         <StatsCard
           title="Total Undangan"
           value="10"
-          icon={<FileText size={18} />}
+          icon={<List size={18} />}
         />
 
         <StatsCard
-          title="Undangan Menunggu Aktivasi"
+          title="Menunggu Aktivasi"
           value="3"
-          icon={<MessageSquare size={18} />}
+          icon={<Archive size={18} />}
         />
 
         <StatsCard
           title="Undangan Aktif"
           value="7"
-          icon={<CircleDollarSign size={18} />}
+          icon={<CheckCircle size={18} />}
         />
       </section>
 
-      {/* TEMPLATE SECTION */}
-      <section>
-        <div className="mb-5 flex items-center justify-between">
+      <section className="rounded-3xl mt-8" id="template">
+        <div className="mb-6 items-end justify-between gap-4 grid grid-cols-2">
           <div>
-            <h2 className="text-lg font-semibold text-[#2f2623]">
+            <h2 className="font-geist text-2xl font-semibold text-[#2f2623]">
               Pilihan Template Undangan
             </h2>
 
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="mt-1 text-base text-muted-foreground">
               Temukan berbagai desain undangan yang siap digunakan untuk momen
               spesial Anda.
             </p>
           </div>
 
-          <button className="flex items-center gap-1 text-sm font-medium text-[#b56c56]">
+          <button
+            className="
+              ml-auto
+              flex
+              shrink-0
+              items-center
+              gap-1
+              text-sm
+              font-medium
+              text-[#b56c56]
+              transition-opacity
+              hover:opacity-75
+            "
+          >
             Lihat Semua
             <ChevronRight size={16} />
           </button>
         </div>
-
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {templates.map((template) => (
-            <TemplateCard
-              key={template.id}
-              title={template.title}
-              description={template.description}
-              image={template.image}
-            />
-          ))}
-        </div>
       </section>
-    </div>
+      <div className="flex-1 ">
+        <Carousel
+          opts={{
+            align: "start",
+            dragFree: true,
+          }}
+          className=""
+        >
+          <CarouselContent className="-ml-4">
+            {templates.map((template) => (
+              <CarouselItem
+                key={template.id}
+                className="
+                    pl-4
+                    basis-[85%]
+                    sm:basis-[50%]
+                    lg:basis-[33.333%]
+                    xl:basis-[25%]
+                    shrink-0
+                  "
+              >
+                <div className="space-y-4">
+                  <Card2 alt={template.title} image={template.image} />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+
+          {/* CONTROLS */}
+          <div className=" mt-6 gap-2 mx-10 ">
+            <CarouselPrevious  className=" w-12 min-h-0 "/>
+
+            <CarouselNext  className="w-12 min-h-0 "/>
+          </div>
+        </Carousel>
+      </div>
+    </PageWrapper>
   );
 }

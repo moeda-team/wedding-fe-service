@@ -8,7 +8,7 @@ export function TemplateCard({
   image: string;
 }) {
   return (
-    <div className="group overflow-hidden rounded-2xl border bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
+    <div className="group overflow-hidden rounded-2xl border  shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
       {" "}
       <div className="aspect-[4/3] overflow-hidden">
         {" "}
