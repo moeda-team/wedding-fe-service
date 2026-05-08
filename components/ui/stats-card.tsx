@@ -8,14 +8,15 @@ export function StatsCard({
   icon: React.ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border bg-white p-6 shadow-sm">
-      <div className="flex items-center gap-2 text-muted-foreground">
-        {icon}
-
-        <p className="text-sm">{title}</p>
+    <div className="rounded-2xl border bg-linear-to-br/decreasing from-white via-white to-pink-linear p-6 shadow-sm">
+      <div className="flex items-center gap-2 text-font-black-primary">
+        <div className="bg-gray-50 p-4 rounded-full">{icon}</div>
+        <p className="text-2xl ">{title}</p>
       </div>
 
-      <h3 className="mt-4 text-4xl font-bold text-[#2f2623]">{value}</h3>
+      <h3 className="mt-4 ml-2 text-4xl font-bold text-[#2f2623] font-geist ">
+        {value}
+      </h3>
     </div>
   );
 }

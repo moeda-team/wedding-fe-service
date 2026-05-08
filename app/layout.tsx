@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Geist, Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
+import { Sidebar } from "@/components/ui/sidebar";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+});
+
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-geist",
 });
 
 const playfair = Playfair_Display({
@@ -15,6 +21,7 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: "Invitee",
   description: "Digital Wedding Invitation",
+  icons: "/images/Logo.png",
 };
 
 export default function RootLayout({
@@ -27,8 +34,11 @@ export default function RootLayout({
       <body
         className={`
           ${inter.variable}
+          ${geist.variable}
           ${playfair.variable}
-          min-h-screen bg-[#f7f4f2] font-sans antialiased
+          bg-[#f7f4f2]
+          font-sans
+          antialiased
         `}
       >
         {children}

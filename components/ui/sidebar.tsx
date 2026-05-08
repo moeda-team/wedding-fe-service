@@ -1,14 +1,21 @@
 "use client";
 
-import { Home, Settings, Users } from "lucide-react";
+import { Home, MailOpen, Settings, UserPen, Users } from "lucide-react";
 
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { LucideIcon, ChevronDown } from "lucide-react";
 import { NavItem } from "@/types/sidebar-interface";
+import { Button } from "./button";
 
-const navItems: NavItem[] = [
-  { label: "Dashboard", href: "/dashboard", icon: Home },
+export const navItems: NavItem[] = [
+  { label: "Dashboard", href: "/dashboard", icon: Home, title: "Beranda" },
+  {
+    label: "Undangan Digital",
+    href: "/invitation",
+    icon: MailOpen,
+    title: "Edit Undangan",
+  },
   {
     label: "Users",
     icon: Users,
@@ -23,11 +30,50 @@ const navItems: NavItem[] = [
 
 export function Sidebar() {
   return (
-    <ul className="flex flex-col gap-1">
-      {navItems.map((item) => (
-        <SidebarItem key={item.href ?? item.label} item={item} />
-      ))}
-    </ul>
+    <aside className="w-72 shrink-0 border-r-4 border-8 bg-white">
+      <div className="sticky top-0 flex h-screen flex-col">
+        {/* HEADER */}
+        <div className="px-6 py-5 border-b">
+          <h1 className="font-serif text-3xl italic text-[#3b302d]">Invitee</h1>
+
+          <p className="mt-1 text-sm text-muted-foreground">
+            BUILD YOUR DIGITAL INVITATION
+          </p>
+        </div>
+
+        {/* NAV */}
+        <nav className="flex flex-1 flex-col overflow-y-auto px-4 py-6">
+          <ul className="flex flex-col gap-1">
+            {navItems.map((item) => (
+              <SidebarItem key={item.href ?? item.label} item={item} />
+            ))}
+          </ul>
+
+          {/* BOTTOM SECTION */}
+          <div className="mt-auto pb-4">
+            <div className="rounded-xl border-2 p-3">
+              <div className="flex flex-col gap-3">
+                <p className="text-lg font-semibold text-font-black-primary">
+                  Jadi Creator & Hasilkan Pendapatan
+                </p>
+
+                <p className="text-md text-gray-500">
+                  Invite friends and get 50 more
+                </p>
+
+                <Button className="rounded-xl p-6">
+                  <div className="flex items-center gap-4">
+                    <UserPen className="h-5 w-5 shrink-0" />
+
+                    <p className="text-lg">Jadi Creator Template</p>
+                  </div>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </aside>
   );
 }
 

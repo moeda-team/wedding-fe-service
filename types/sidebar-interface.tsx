@@ -5,4 +5,5 @@ export interface NavItem {
   href?: string; // optional kalau punya submenu
   icon?: LucideIcon;
   children?: NavItem[]; // submenu
+  title?: string;
 }
