@@ -6,6 +6,7 @@
 
 @theme {
   --color-border-sidebar: #e5e5e5;
+  --color-destructive: #dc2626;
   --color-bg-pink: #edd9d6;
   --color-pink-2: #c4847c;
   --color-pink-primary: #b27871;
@@ -13,6 +14,7 @@
   --color-pink-linear: #b278714d;
   --color-font-black-primary: #0a0a0a;
   --color-font-gray-primary: #737373;
+  --color-white-10-opacity: #1717171a;
   --color-btn-warning: #d97706;
   --font-playfair: "Playfair Display", serif;
   --font-geist: "Geist", serif;
