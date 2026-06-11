@@ -102,7 +102,7 @@ export default function DashboardPage() {
           </button>
         </div>
       </section>
-      <div className="flex-1 ">
+      <div className="">
         <Carousel
           opts={{
             align: "start",

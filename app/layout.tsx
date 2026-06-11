@@ -36,7 +36,7 @@ export default function RootLayout({
           ${inter.variable}
           ${geist.variable}
           ${playfair.variable}
-          bg-[#f7f4f2]
+          bg-white
           font-sans
           antialiased
         `}
