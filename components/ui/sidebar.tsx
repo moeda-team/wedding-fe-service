@@ -4,7 +4,7 @@ import { Home, MailOpen, Settings, UserPen, Users } from "lucide-react";
 
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { LucideIcon, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { NavItem } from "@/types/sidebar-interface";
 import { Button } from "./button";
 

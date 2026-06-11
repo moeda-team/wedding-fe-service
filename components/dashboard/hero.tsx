@@ -84,10 +84,13 @@ export default function HeroSection() {
         {/* RIGHT IMAGE */}
         <div className="relative w-full md:w-[50%] min-h-[200px] md:min-h-0 z-10">
           {/* IMAGE */}
-          <img
+          <Image
             src="/images/hero-dashboard.png"
             alt="Wedding Couple"
-            className="absolute inset-0 h-full w-full object-cover"
+            fill
+            priority
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className="object-cover"
           />
 
           {/* ELLIPSE EFFECT */}

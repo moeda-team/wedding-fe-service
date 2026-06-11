@@ -3,10 +3,7 @@
 import { Plus } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import * as React from "react";
-function cn(...classes: Array<string | boolean | null | undefined>) {
-  return classes.filter(Boolean).join(" ");
-}
+
 export default function UploadPhotoCard({
   title,
   titleAttribute,

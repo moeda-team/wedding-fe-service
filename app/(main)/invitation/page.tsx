@@ -11,11 +11,9 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -355,10 +353,10 @@ export default function InvitationListPage() {
                               <RadioGroupItem
                                 className="bg-white"
                                 value="mempelai pria - mempelai wanita"
-                                id="option-one"
+                                id="foto-position-one"
                               />
                               <Label
-                                htmlFor="option-one"
+                                htmlFor="foto-position-one"
                                 className="grid grid-rows-2"
                               >
                                 <p>Mempelai Pria - Mempelai Wanita</p>
@@ -372,10 +370,10 @@ export default function InvitationListPage() {
                               <RadioGroupItem
                                 className="bg-white"
                                 value="Mempelai Wanita - Mempelai Pria"
-                                id="option-two"
+                                id="foto-position-two"
                               />
                               <Label
-                                htmlFor="option-two"
+                                htmlFor="foto-position-two"
                                 className="grid grid-rows-2"
                               >
                                 <p>Mempelai Wanita - Mempelai Pria</p>
@@ -397,10 +395,10 @@ export default function InvitationListPage() {
                               <RadioGroupItem
                                 className="bg-white"
                                 value="mempelai pria - mempelai wanita"
-                                id="option-one"
+                                id="nama-position-one"
                               />
                               <Label
-                                htmlFor="option-one"
+                                htmlFor="nama-position-one"
                                 className="grid grid-rows-2"
                               >
                                 <p>Mempelai Pria - Mempelai Wanita</p>
@@ -414,10 +412,10 @@ export default function InvitationListPage() {
                               <RadioGroupItem
                                 className="bg-white"
                                 value="Mempelai Wanita - Mempelai Pria"
-                                id="option-two"
+                                id="nama-position-two"
                               />
                               <Label
-                                htmlFor="option-two"
+                                htmlFor="nama-position-two"
                                 className="grid grid-rows-2"
                               >
                                 <p>Mempelai Wanita - Mempelai Pria</p>
