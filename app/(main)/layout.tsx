@@ -1,7 +1,8 @@
 "use client";
 
+import { logout } from "@/app/lib/auth-actions";
 import { navItems, Sidebar } from "@/components/ui/sidebar";
-import { ArrowLeft, Bell, UserCircle2Icon } from "lucide-react";
+import { ArrowLeft, Bell, LogOut, UserCircle2Icon } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 export default function MainLayout({
@@ -51,7 +52,7 @@ export default function MainLayout({
               <Bell size={20} />
             </button>
 
-            <button
+            <div
               className="
                 flex
                 items-center
@@ -71,7 +72,17 @@ export default function MainLayout({
                 <p className="text-sm font-medium">Rizky</p>
                 <p className="text-xs text-muted-foreground">Administrator</p>
               </div>
-            </button>
+
+              <form action={logout}>
+                <button
+                  type="submit"
+                  aria-label="Keluar"
+                  className="ml-1 rounded-full p-1.5 text-muted-foreground transition hover:bg-[#f4f1ef] hover:text-foreground"
+                >
+                  <LogOut size={18} />
+                </button>
+              </form>
+            </div>
           </div>
         </header>
 
