@@ -4,7 +4,7 @@ import { decodeSession } from "@/app/lib/session";
 
 // Routes reachable without a session. Everything else requires authentication
 // and unauthenticated visitors are redirected to /login.
-const PUBLIC_ROUTES = ["/login"];
+const PUBLIC_ROUTES = ["/login", "/register"];
 
 export default function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname;

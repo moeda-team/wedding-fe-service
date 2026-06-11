@@ -4,18 +4,19 @@ import { useActionState, useState } from "react";
 import Link from "next/link";
 import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 
-import { login, type LoginState } from "@/app/(auth)/login/actions";
+import { register, type RegisterState } from "@/app/(auth)/register/actions";
 import { GoogleIcon } from "@/components/auth/google-icon";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export function LoginForm() {
-  const [state, formAction, pending] = useActionState<LoginState, FormData>(
-    login,
+export function RegisterForm() {
+  const [state, formAction, pending] = useActionState<RegisterState, FormData>(
+    register,
     undefined,
   );
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   return (
     <form action={formAction} className="mt-8 space-y-5">
@@ -31,7 +32,7 @@ export function LoginForm() {
 
       <div className="flex items-center gap-3 text-xs text-muted-foreground">
         <span className="h-px flex-1 bg-border" />
-        <span className="whitespace-nowrap">atau masuk dengan email</span>
+        <span className="whitespace-nowrap">Or</span>
         <span className="h-px flex-1 bg-border" />
       </div>
 
@@ -40,6 +41,18 @@ export function LoginForm() {
           {state.error}
         </p>
       )}
+
+      <div className="space-y-2">
+        <Label htmlFor="name">Nama Lengkap</Label>
+        <Input
+          id="name"
+          name="name"
+          type="text"
+          placeholder="Masukkan nama lengkap"
+          autoComplete="name"
+          required
+        />
+      </div>
 
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
@@ -54,22 +67,14 @@ export function LoginForm() {
       </div>
 
       <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="password">Kata Sandi</Label>
-          <a
-            href="#"
-            className="text-xs font-medium text-pink-primary hover:underline"
-          >
-            Lupa kata sandi?
-          </a>
-        </div>
+        <Label htmlFor="password">Kata Sandi</Label>
         <div className="relative">
           <Input
             id="password"
             name="password"
             type={showPassword ? "text" : "password"}
             placeholder="Masukkan kata sandi"
-            autoComplete="current-password"
+            autoComplete="new-password"
             required
             className="pr-10"
           />
@@ -86,6 +91,33 @@ export function LoginForm() {
         </div>
       </div>
 
+      <div className="space-y-2">
+        <Label htmlFor="confirmPassword">Konfirmasi Kata Sandi</Label>
+        <div className="relative">
+          <Input
+            id="confirmPassword"
+            name="confirmPassword"
+            type={showConfirm ? "text" : "password"}
+            placeholder="Masukkan ulang kata sandi"
+            autoComplete="new-password"
+            required
+            className="pr-10"
+          />
+          <button
+            type="button"
+            onClick={() => setShowConfirm((v) => !v)}
+            aria-label={
+              showConfirm
+                ? "Sembunyikan konfirmasi kata sandi"
+                : "Tampilkan konfirmasi kata sandi"
+            }
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+          >
+            {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
+          </button>
+        </div>
+      </div>
+
       <Button type="submit" size="lg" disabled={pending} className="w-full">
         {pending ? (
           <>
@@ -93,17 +125,17 @@ export function LoginForm() {
             Memproses...
           </>
         ) : (
-          "Masuk"
+          "Daftar"
         )}
       </Button>
 
       <p className="text-center text-sm text-muted-foreground">
-        Belum memiliki akun?{" "}
+        Sudah memiliki akun?{" "}
         <Link
-          href="/register"
+          href="/login"
           className="font-medium text-pink-primary hover:underline"
         >
-          Daftar Akun
+          Login
         </Link>
       </p>
     </form>
