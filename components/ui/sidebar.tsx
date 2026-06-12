@@ -4,7 +4,7 @@ import { Home, MailOpen, Settings, UserPen, Users } from "lucide-react";
 
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { LucideIcon, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { NavItem } from "@/types/sidebar-interface";
 import { Button } from "./button";
 
@@ -34,7 +34,7 @@ export function Sidebar() {
       <div className="sticky top-0 flex h-screen flex-col">
         {/* HEADER */}
         <div className="px-6 py-5 border-b">
-          <h1 className="font-serif text-3xl italic text-[#3b302d]">Invitee</h1>
+          <img src="/images/Logo.png" alt="Invitee" className="h-9 w-auto" />
 
           <p className="mt-1 text-sm text-muted-foreground">
             BUILD YOUR DIGITAL INVITATION
