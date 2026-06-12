@@ -30,7 +30,7 @@ export const navItems: NavItem[] = [
 
 export function Sidebar() {
   return (
-    <aside className="w-72 shrink-0 border-r-4 border-8 bg-white">
+    <aside className="w-72 shrink-0 border-r-4 bg-white">
       <div className="sticky top-0 flex h-screen flex-col">
         {/* HEADER */}
         <div className="px-6 py-5 border-b">

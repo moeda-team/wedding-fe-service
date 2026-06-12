@@ -17,7 +17,7 @@ export default function MainLayout({
     "Dashboard";
 
   return (
-    <div className="flex bg-[#f7f4f2]">
+    <div className="flex bg-[#F5F5F5]">
       {/* SIDEBAR */}
       <Sidebar />
 
