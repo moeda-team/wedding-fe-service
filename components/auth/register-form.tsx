@@ -1,11 +1,12 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Eye, EyeOff, LoaderCircle } from "lucide-react";
 
 import { register, type RegisterState } from "@/app/(auth)/register/actions";
-import { GoogleIcon } from "@/components/auth/google-icon";
+import { GOOGLE_AUTH_URL, GoogleIcon } from "@/components/auth/google-icon";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,17 +18,25 @@ export function RegisterForm() {
   );
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const router = useRouter();
+
+  // On success the action has already set the session cookies; show the
+  // confirmation briefly, then move the user into the app.
+  useEffect(() => {
+    if (!state?.success) return;
+    const timer = setTimeout(() => router.replace("/dashboard"), 1200);
+    return () => clearTimeout(timer);
+  }, [state, router]);
+
+  const done = state?.success === true;
 
   return (
     <form action={formAction} className="mt-8 space-y-5">
-      <Button
-        type="button"
-        variant="outline"
-        size="lg"
-        className="w-full gap-3"
-      >
-        <GoogleIcon />
-        Daftar dengan Google
+      <Button asChild variant="outline" size="lg" className="w-full gap-3">
+        <a href={GOOGLE_AUTH_URL}>
+          <GoogleIcon />
+          Daftar dengan Google
+        </a>
       </Button>
 
       <div className="flex items-center gap-3 text-xs text-muted-foreground">
@@ -36,6 +45,12 @@ export function RegisterForm() {
         <span className="h-px flex-1 bg-border" />
       </div>
 
+      {done && (
+        <p className="rounded-2xl bg-emerald-500/10 px-4 py-2.5 text-sm text-emerald-700">
+          Registrasi berhasil! Mengalihkan ke dasbor...
+        </p>
+      )}
+
       {state?.error && (
         <p className="rounded-2xl bg-destructive/10 px-4 py-2.5 text-sm text-destructive">
           {state.error}
@@ -43,10 +58,10 @@ export function RegisterForm() {
       )}
 
       <div className="space-y-2">
-        <Label htmlFor="name">Nama Lengkap</Label>
+        <Label htmlFor="fullName">Nama Lengkap</Label>
         <Input
-          id="name"
-          name="name"
+          id="fullName"
+          name="fullName"
           type="text"
           placeholder="Masukkan nama lengkap"
           autoComplete="name"
@@ -73,7 +88,7 @@ export function RegisterForm() {
             id="password"
             name="password"
             type={showPassword ? "text" : "password"}
-            placeholder="Masukkan kata sandi"
+            placeholder="Min. 8 karakter, huruf besar, kecil & angka"
             autoComplete="new-password"
             required
             className="pr-10"
@@ -118,11 +133,36 @@ export function RegisterForm() {
         </div>
       </div>
 
-      <Button type="submit" size="lg" disabled={pending} className="w-full">
-        {pending ? (
+      <label
+        htmlFor="isTermsAccepted"
+        className="flex items-start gap-2.5 text-sm text-muted-foreground"
+      >
+        <input
+          id="isTermsAccepted"
+          name="isTermsAccepted"
+          type="checkbox"
+          required
+          className="mt-0.5 size-4 shrink-0 rounded border-border accent-[#2f2623]"
+        />
+        <span>
+          Saya menyetujui{" "}
+          <a href="#" className="font-medium text-pink-primary hover:underline">
+            Syarat &amp; Ketentuan
+          </a>{" "}
+          yang berlaku.
+        </span>
+      </label>
+
+      <Button
+        type="submit"
+        size="lg"
+        disabled={pending || done}
+        className="w-full"
+      >
+        {pending || done ? (
           <>
             <LoaderCircle className="animate-spin" />
-            Memproses...
+            {done ? "Berhasil" : "Memproses..."}
           </>
         ) : (
           "Daftar"

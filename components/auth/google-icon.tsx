@@ -1,3 +1,7 @@
+// Backend-driven Google OAuth: the backend handles register-or-login and
+// redirects back to /auth/callback with the issued tokens.
+export const GOOGLE_AUTH_URL = `${process.env.NEXT_PUBLIC_API_URL ?? ""}/v1/auth/google`;
+
 export function GoogleIcon() {
   return (
     <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">

@@ -25,8 +25,9 @@ export default function proxy(req: NextRequest) {
 }
 
 export const config = {
-  // Skip API routes, Next internals, and static assets.
+  // Skip API/auth routes, Next internals, and static assets. `auth/callback`
+  // is the Google OAuth receiver — it sets the session itself.
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.svg$|.*\\.ico$).*)",
+    "/((?!api|auth/callback|_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.svg$|.*\\.ico$).*)",
   ],
 };

@@ -62,9 +62,11 @@ export function AuthShell({
             <div className="w-full max-w-md">
               {/* Brand */}
               <div className="mb-10">
-                <h1 className="font-serif text-3xl italic text-[#2f2623]">
-                  Invitee
-                </h1>
+                <img
+                  src="/images/Logo.png"
+                  alt="Invitee"
+                  className="h-9 w-auto"
+                />
                 <p className="mt-1 text-sm text-muted-foreground">
                   Build Your Digital Invitation
                 </p>
