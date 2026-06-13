@@ -1,12 +1,20 @@
 "use client";
 
 import Image from "next/image";
-import { Eye, EyeOff, Mail } from "lucide-react";
-import { useState } from "react";
+import Link from "next/link";
+import { Eye, EyeOff, LoaderCircle, Mail } from "lucide-react";
+import { useActionState, useState } from "react";
+
+import { register, type RegisterState } from "@/app/register/actions";
+import { GOOGLE_AUTH_URL, GoogleIcon } from "@/components/auth/google-icon";
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [state, formAction, pending] = useActionState<RegisterState, FormData>(
+    register,
+    undefined,
+  );
 
   return (
     <div className="min-h-screen bg-[#f5f2ef] flex items-center justify-center p-3 sm:p-6">
@@ -58,9 +66,13 @@ export default function RegisterPage() {
           </div>
 
           {/* Google Button */}
-          <button className="w-full border border-gray-300 rounded-lg h-11 text-sm font-medium hover:bg-gray-50 transition">
+          <a
+            href={GOOGLE_AUTH_URL}
+            className="flex w-full items-center justify-center gap-3 border border-gray-300 rounded-lg h-11 text-sm font-medium hover:bg-gray-50 transition"
+          >
+            <GoogleIcon />
             Daftar dengan Google
-          </button>
+          </a>
 
           {/* Divider */}
           <div className="flex items-center gap-4 my-6">
@@ -69,16 +81,30 @@ export default function RegisterPage() {
             <div className="h-px bg-gray-200 flex-1" />
           </div>
 
+          {/* Error message */}
+          {state?.error && (
+            <p className="mb-4 rounded-lg bg-red-500/10 px-4 py-2.5 text-sm text-red-600">
+              {state.error}
+            </p>
+          )}
+
           {/* Form */}
-          <form className="space-y-4">
+          <form action={formAction} className="space-y-4">
             {/* Name */}
             <div>
-              <label className="text-sm font-medium text-[#2f2a26]">
+              <label
+                htmlFor="fullName"
+                className="text-sm font-medium text-[#2f2a26]"
+              >
                 Nama Lengkap <span className="text-red-500">*</span>
               </label>
 
               <input
+                id="fullName"
+                name="fullName"
                 type="text"
+                autoComplete="name"
+                required
                 placeholder="Masukkan nama lengkap"
                 className="mt-1 w-full h-11 rounded-lg border border-gray-300 px-4 text-sm outline-none focus:ring-2 focus:ring-[#5c5248]"
               />
@@ -86,12 +112,19 @@ export default function RegisterPage() {
 
             {/* Email */}
             <div>
-              <label className="text-sm font-medium text-[#2f2a26]">
+              <label
+                htmlFor="email"
+                className="text-sm font-medium text-[#2f2a26]"
+              >
                 Email <span className="text-red-500">*</span>
               </label>
 
               <input
+                id="email"
+                name="email"
                 type="email"
+                autoComplete="email"
+                required
                 placeholder="Masukkan alamat email"
                 className="mt-1 w-full h-11 rounded-lg border border-gray-300 px-4 text-sm outline-none focus:ring-2 focus:ring-[#5c5248]"
               />
@@ -99,14 +132,21 @@ export default function RegisterPage() {
 
             {/* Password */}
             <div>
-              <label className="text-sm font-medium text-[#2f2a26]">
+              <label
+                htmlFor="password"
+                className="text-sm font-medium text-[#2f2a26]"
+              >
                 Kata Sandi <span className="text-red-500">*</span>
               </label>
 
               <div className="relative mt-1">
                 <input
+                  id="password"
+                  name="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Masukkan kata sandi"
+                  autoComplete="new-password"
+                  required
+                  placeholder="Min. 8 karakter, huruf besar, kecil & angka"
                   className="w-full h-11 rounded-lg border border-gray-300 px-4 pr-12 text-sm outline-none focus:ring-2 focus:ring-[#5c5248]"
                 />
 
@@ -126,13 +166,20 @@ export default function RegisterPage() {
 
             {/* Confirm Password */}
             <div>
-              <label className="text-sm font-medium text-[#2f2a26]">
+              <label
+                htmlFor="confirmPassword"
+                className="text-sm font-medium text-[#2f2a26]"
+              >
                 Konfirmasi Kata Sandi <span className="text-red-500">*</span>
               </label>
 
               <div className="relative mt-1">
                 <input
+                  id="confirmPassword"
+                  name="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
+                  autoComplete="new-password"
+                  required
                   placeholder="Masukkan konfirmasi kata sandi"
                   className="w-full h-11 rounded-lg border border-gray-300 px-4 pr-12 text-sm outline-none focus:ring-2 focus:ring-[#5c5248]"
                 />
@@ -153,25 +200,48 @@ export default function RegisterPage() {
 
             {/* Checkbox */}
             <div className="flex items-start gap-2">
-              <input type="checkbox" className="mt-1" />
+              <input
+                id="isTermsAccepted"
+                name="isTermsAccepted"
+                type="checkbox"
+                required
+                className="mt-1"
+              />
 
-              <p className="text-sm text-muted-foreground">
+              <label
+                htmlFor="isTermsAccepted"
+                className="text-sm text-muted-foreground"
+              >
                 Saya setuju dengan Syarat & Ketentuan dan Kebijakan Privasi
-              </p>
+              </label>
             </div>
 
             {/* Submit */}
-            <button className="w-full h-11 rounded-lg bg-[#2f2a26] text-white font-medium hover:bg-[#221d1a] transition">
-              Daftar
+            <button
+              type="submit"
+              disabled={pending}
+              className="flex w-full h-11 items-center justify-center gap-2 rounded-lg bg-[#2f2a26] text-white font-medium hover:bg-[#221d1a] transition disabled:opacity-70"
+            >
+              {pending ? (
+                <>
+                  <LoaderCircle className="size-5 animate-spin" />
+                  Memproses...
+                </>
+              ) : (
+                "Daftar"
+              )}
             </button>
           </form>
 
           {/* Login */}
           <p className="text-sm text-center text-muted-foreground mt-6">
             Sudah memiliki akun?{" "}
-            <span className="font-semibold text-[#2f2a26] cursor-pointer">
+            <Link
+              href="/login"
+              className="font-semibold text-[#2f2a26] cursor-pointer hover:underline"
+            >
               Login
-            </span>
+            </Link>
           </p>
         </div>
 

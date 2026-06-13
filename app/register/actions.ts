@@ -1,10 +1,12 @@
 "use server";
 
+import { redirect } from "next/navigation";
+
 import { ApiError } from "@/app/lib/api";
 import { registerUser } from "@/app/lib/auth-service";
-import { createSession, setAuthTokens } from "@/app/lib/session";
+import { setAuthTokens } from "@/app/lib/session";
 
-export type RegisterState = { error?: string; success?: boolean } | undefined;
+export type RegisterState = { error?: string } | undefined;
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // Mirrors the backend rule: min 8 chars with upper, lower, and a number.
@@ -40,10 +42,11 @@ export async function register(
   }
 
   try {
-    // The register endpoint also issues tokens, so we authenticate the new
-    // user immediately. (Redirecting to /login would dead-end here: the
-    // backend rejects login until the email is verified — AUTH_010.)
-    const { user, tokens } = await registerUser({
+    // Register issues tokens but the account starts unverified. We stash the
+    // tokens (so the OTP step can finalize the session via refresh) but do NOT
+    // create the session cookie yet — the dashboard stays gated until the
+    // email is verified with the OTP we just emailed.
+    const { tokens } = await registerUser({
       fullName,
       email,
       password,
@@ -51,12 +54,11 @@ export async function register(
     });
 
     await setAuthTokens(tokens);
-    await createSession(user.id, user.email);
   } catch (err) {
     if (err instanceof ApiError) return { error: err.message };
     return { error: "Terjadi kesalahan tak terduga. Silakan coba lagi." };
   }
 
-  // Signal success so the form can show a notification, then redirect.
-  return { success: true };
+  // Move the user into the OTP verification step, carrying their email.
+  redirect(`/verify-otp?email=${encodeURIComponent(email)}`);
 }

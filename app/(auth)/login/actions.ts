@@ -6,10 +6,13 @@ import { redirect } from "next/navigation";
 import { ApiError } from "@/app/lib/api";
 import { loginUser } from "@/app/lib/auth-service";
 import { createSession, setAuthTokens } from "@/app/lib/session";
+import { normalizeProfilePicture } from "@/lib/avatar";
 
 export type LoginState = { error?: string } | undefined;
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Backend ErrorCode for an unverified email (it (re)sends a REGISTER OTP).
+const EMAIL_NOT_VERIFIED = "AUTH_012";
 
 export async function login(
   _prevState: LoginState,
@@ -31,9 +34,23 @@ export async function login(
     const { user, tokens } = await loginUser({ email, password, userAgent });
 
     await setAuthTokens(tokens);
-    await createSession(user.id, user.email);
+    await createSession({
+      id: user.id,
+      email: user.email,
+      fullName: user.fullName,
+      role: user.role,
+      image: normalizeProfilePicture(user.profilePicture),
+      provider: user.provider,
+    });
   } catch (err) {
-    if (err instanceof ApiError) return { error: err.message };
+    if (err instanceof ApiError) {
+      // Account exists but isn't verified — the backend just emailed an OTP.
+      // Send the user to the verification page to finish.
+      if (err.code === EMAIL_NOT_VERIFIED) {
+        redirect(`/verify-otp?email=${encodeURIComponent(email)}`);
+      }
+      return { error: err.message };
+    }
     return { error: "Terjadi kesalahan tak terduga. Silakan coba lagi." };
   }
 

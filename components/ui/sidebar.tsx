@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, MailOpen, Settings, UserPen, Users } from "lucide-react";
+import { Home, ListTodo, Mail, UserPen, Wallet } from "lucide-react";
 
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
@@ -9,23 +9,10 @@ import { NavItem } from "@/types/sidebar-interface";
 import { Button } from "./button";
 
 export const navItems: NavItem[] = [
-  { label: "Dashboard", href: "/dashboard", icon: Home, title: "Beranda" },
-  {
-    label: "Undangan Digital",
-    href: "/invitation",
-    icon: MailOpen,
-    title: "Edit Undangan",
-  },
-  {
-    label: "Users",
-    icon: Users,
-    children: [
-      // no href, has children
-      { label: "All Users", href: "/users" },
-      { label: "Roles", href: "/users/roles" },
-    ],
-  },
-  { label: "Settings", href: "/settings", icon: Settings },
+  { label: "Beranda", href: "/dashboard", icon: Home },
+  { label: "To Do List", href: "/todo", icon: ListTodo },
+  { label: "Undangan Digital", href: "/invitation", icon: Mail },
+  { label: "Transaksi", href: "/transaction", icon: Wallet },
 ];
 
 export function Sidebar() {

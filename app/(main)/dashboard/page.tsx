@@ -1,3 +1,4 @@
+import { getDashboardStats } from "@/app/lib/dashboard-service";
 import HeroSection from "@/components/dashboard/hero";
 import { PageWrapper } from "@/components/layout/page-wrapper";
 import { Card2 } from "@/components/ui/card-2";
@@ -11,38 +12,18 @@ import {
 import { StatsCard } from "@/components/ui/stats-card";
 import { Archive, CheckCircle, ChevronRight, List } from "lucide-react";
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const stats = await getDashboardStats();
+
   const templates = [
-    {
-      id: 1,
-      title: "Luxury Wedding",
-      description: "Elegant wedding invitation",
-      image: "/images/template-1.png",
-    },
-    {
-      id: 2,
-      title: "Minimal Floral",
-      description: "Soft and modern floral style",
-      image: "/images/template-2.png",
-    },
-    {
-      id: 3,
-      title: "Classic White",
-      description: "Simple classy invitation",
-      image: "/images/template-3.png",
-    },
-    {
-      id: 4,
-      title: "Romantic Gold",
-      description: "Luxury gold themed design",
-      image: "/images/template-4.png",
-    },
-    {
-      id: 5,
-      title: "Rustic Bloom",
-      description: "Warm botanical aesthetics",
-      image: "/images/template-5.png",
-    },
+    { id: 1, title: "Luxury Wedding", image: "/images/template-1.png" },
+    { id: 2, title: "Minimal Floral", image: "/images/template-2.png" },
+    { id: 3, title: "Classic White", image: "/images/template-3.png" },
+    { id: 4, title: "Romantic Gold", image: "/images/template-4.png" },
+    { id: 5, title: "Rustic Bloom", image: "/images/template-5.png" },
+    { id: 6, title: "Elegant Rose", image: "/images/template-1.png" },
+    { id: 7, title: "Modern Mono", image: "/images/template-2.png" },
+    { id: 8, title: "Soft Botanical", image: "/images/template-3.png" },
   ];
 
   return (
@@ -53,19 +34,19 @@ export default function DashboardPage() {
       <section className="grid gap-4 md:grid-cols-3 mt-8">
         <StatsCard
           title="Total Undangan"
-          value="10"
+          value={String(stats.total)}
           icon={<List size={18} />}
         />
 
         <StatsCard
           title="Menunggu Aktivasi"
-          value="3"
+          value={String(stats.pending)}
           icon={<Archive size={18} />}
         />
 
         <StatsCard
           title="Undangan Aktif"
-          value="7"
+          value={String(stats.active)}
           icon={<CheckCircle size={18} />}
         />
       </section>
@@ -102,42 +83,34 @@ export default function DashboardPage() {
           </button>
         </div>
       </section>
-      <div className="">
-        <Carousel
-          opts={{
-            align: "start",
-            dragFree: true,
-          }}
-          className=""
-        >
-          <CarouselContent className="-ml-4">
-            {templates.map((template) => (
-              <CarouselItem
-                key={template.id}
-                className="
-                    pl-4
-                    basis-[85%]
-                    sm:basis-[50%]
-                    lg:basis-[33.333%]
-                    xl:basis-[25%]
-                    shrink-0
-                  "
-              >
-                <div className="space-y-4">
-                  <Card2 alt={template.title} image={template.image} />
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
+      <Carousel
+        opts={{
+          align: "start",
+          dragFree: true,
+        }}
+      >
+        <CarouselContent className="-ml-4">
+          {templates.map((template) => (
+            <CarouselItem
+              key={template.id}
+              className="
+                  pl-4
+                  basis-[60%]
+                  sm:basis-1/3
+                  md:basis-1/4
+                  lg:basis-1/5
+                  xl:basis-1/6
+                "
+            >
+              <Card2 alt={template.title} image={template.image} />
+            </CarouselItem>
+          ))}
+        </CarouselContent>
 
-          {/* CONTROLS */}
-          <div className=" mt-6 gap-2 mx-10 ">
-            <CarouselPrevious  className=" w-12 min-h-0 "/>
-
-            <CarouselNext  className="w-12 min-h-0 "/>
-          </div>
-        </Carousel>
-      </div>
+        {/* CONTROLS — overlaid on the card edges, vertically centered */}
+        <CarouselPrevious className="left-2 size-9 border-none bg-white/85 text-[#2f2623] shadow-md backdrop-blur-sm hover:bg-white" />
+        <CarouselNext className="right-2 size-9 border-none bg-white/85 text-[#2f2623] shadow-md backdrop-blur-sm hover:bg-white" />
+      </Carousel>
     </PageWrapper>
   );
 }

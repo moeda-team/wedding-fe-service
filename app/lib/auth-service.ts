@@ -71,3 +71,75 @@ export async function loginUser(body: LoginRequest): Promise<AuthResponse> {
   });
   return ensureAuthResponse(res.data);
 }
+
+/**
+ * Exchange a refresh token for a fresh access/refresh token pair (and the
+ * current user). Throws {@link ApiError} when the refresh token is invalid or
+ * revoked (typically 401/403) — the caller should then end the session.
+ */
+export async function refreshTokens(refreshToken: string): Promise<AuthResponse> {
+  const res = await apiFetch<ApiEnvelope<AuthResponse>>("/v1/auth/refresh", {
+    method: "POST",
+    body: JSON.stringify({ refreshToken }),
+  });
+  return ensureAuthResponse(res.data);
+}
+
+/**
+ * Revoke the active session on the backend. Authenticated with the access
+ * token; the backend invalidates the associated refresh token. Best-effort —
+ * callers should still clear local cookies even if this throws.
+ */
+export async function logoutUser(accessToken: string): Promise<void> {
+  await apiFetch("/v1/auth/logout", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+}
+
+export type OtpType = "REGISTER" | "LOGIN" | "FORGOT_PASSWORD";
+
+/** Verify a one-time code. Throws {@link ApiError} on an invalid/expired code. */
+export async function verifyOtp(body: {
+  email: string;
+  code: string;
+  type: OtpType;
+}): Promise<void> {
+  await apiFetch("/v1/auth/verify-otp", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+}
+
+/** (Re)send a one-time code. Throws {@link ApiError} (e.g. cooldown). */
+export async function sendOtp(body: {
+  email: string;
+  type: OtpType;
+}): Promise<void> {
+  await apiFetch("/v1/auth/send-otp", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+}
+
+/** Request a password-reset OTP. Always resolves (the backend doesn't reveal
+ *  whether the email exists); throws {@link ApiError} only on transport/5xx. */
+export async function forgotPassword(body: { email: string }): Promise<void> {
+  await apiFetch("/v1/auth/forgot-password", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+}
+
+/** Set a new password using the FORGOT_PASSWORD OTP. Throws {@link ApiError}
+ *  on an invalid/expired code or a password that fails backend rules. */
+export async function resetPassword(body: {
+  email: string;
+  code: string;
+  newPassword: string;
+}): Promise<void> {
+  await apiFetch("/v1/auth/reset-password", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+}
