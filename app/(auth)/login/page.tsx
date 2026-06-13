@@ -15,20 +15,30 @@ const ERROR_MESSAGES: Record<string, string> = {
   google_failed: "Gagal masuk dengan Google. Silakan coba lagi.",
 };
 
+const NOTICE_MESSAGES: Record<string, string> = {
+  reset: "Kata sandi berhasil diatur ulang. Silakan masuk dengan kata sandi baru Anda.",
+  verified: "Email berhasil diverifikasi. Silakan masuk untuk melanjutkan.",
+};
+
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; reset?: string; verified?: string }>;
 }) {
-  const { error } = await searchParams;
+  const { error, reset, verified } = await searchParams;
   const initialError = error ? ERROR_MESSAGES[error] : undefined;
+  const notice = reset
+    ? NOTICE_MESSAGES.reset
+    : verified
+      ? NOTICE_MESSAGES.verified
+      : undefined;
 
   return (
     <AuthShell
       title="Selamat datang kembali"
       subtitle="Login untuk melanjutkan ke akun Anda."
     >
-      <LoginForm initialError={initialError} />
+      <LoginForm initialError={initialError} notice={notice} />
     </AuthShell>
   );
 }

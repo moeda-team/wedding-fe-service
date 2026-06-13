@@ -8,6 +8,7 @@ import {
   decodeJwtPayload,
   sessionCookieOptions,
 } from "@/app/lib/session";
+import { normalizeProfilePicture } from "@/lib/avatar";
 
 // Receives the result of the backend's Google OAuth flow. The backend handles
 // register-or-login and should redirect the browser here with the issued
@@ -39,6 +40,16 @@ export async function GET(req: NextRequest) {
   const claims = decodeJwtPayload(accessToken);
   if (!claims?.sub || !claims.email) return fail("access token has no sub/email");
 
+  // This route only handles the Google flow, so the picture (if any) is the
+  // Google profile photo. Prefer JWT claims, then an explicit callback param.
+  const googleImage =
+    normalizeProfilePicture(claims.picture) ??
+    normalizeProfilePicture(claims.profilePicture) ??
+    normalizeProfilePicture(claims.image) ??
+    normalizeProfilePicture(
+      params.get("picture") ?? params.get("profilePicture"),
+    );
+
   console.log(`[auth/callback] success for ${claims.email} -> /dashboard`);
 
   const res = NextResponse.redirect(new URL("/dashboard", req.nextUrl));
@@ -58,7 +69,14 @@ export async function GET(req: NextRequest) {
   });
   res.cookies.set(
     SESSION_COOKIE_NAME,
-    createSessionToken(claims.sub, claims.email),
+    createSessionToken({
+      id: claims.sub,
+      email: claims.email,
+      fullName: claims.fullName,
+      role: claims.role,
+      image: googleImage,
+      provider: "GOOGLE",
+    }),
     sessionCookieOptions(),
   );
   return res;

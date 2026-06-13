@@ -10,7 +10,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export function LoginForm({ initialError }: { initialError?: string }) {
+export function LoginForm({
+  initialError,
+  notice,
+}: {
+  initialError?: string;
+  notice?: string;
+}) {
   const [state, formAction, pending] = useActionState<LoginState, FormData>(
     login,
     undefined,
@@ -34,6 +40,12 @@ export function LoginForm({ initialError }: { initialError?: string }) {
         <span className="h-px flex-1 bg-border" />
       </div>
 
+      {notice && !errorMessage && (
+        <p className="rounded-2xl bg-emerald-500/10 px-4 py-2.5 text-sm text-emerald-700">
+          {notice}
+        </p>
+      )}
+
       {errorMessage && (
         <p className="rounded-2xl bg-destructive/10 px-4 py-2.5 text-sm text-destructive">
           {errorMessage}
@@ -55,12 +67,12 @@ export function LoginForm({ initialError }: { initialError?: string }) {
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <Label htmlFor="password">Kata Sandi</Label>
-          <a
-            href="#"
+          <Link
+            href="/forgot-password"
             className="text-xs font-medium text-pink-primary hover:underline"
           >
             Lupa kata sandi?
-          </a>
+          </Link>
         </div>
         <div className="relative">
           <Input

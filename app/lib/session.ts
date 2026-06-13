@@ -11,7 +11,9 @@ const SECRET = process.env.SESSION_SECRET ?? "dev-insecure-secret-change-me";
 export const SESSION_COOKIE_NAME = "session";
 export const ACCESS_TOKEN_COOKIE = "access_token";
 export const REFRESH_TOKEN_COOKIE = "refresh_token";
+const PWRESET_COOKIE = "pwreset";
 const MAX_AGE_SECONDS = 60 * 60 * 24 * 7; // 7 days
+const PWRESET_MAX_AGE_SECONDS = 60 * 15; // mirrors the OTP lifetime
 
 /** Cookie options shared by every place that writes the session cookie. */
 export function sessionCookieOptions() {
@@ -24,15 +26,38 @@ export function sessionCookieOptions() {
   };
 }
 
+/** The identity we persist in the signed session cookie. */
+export type SessionUser = {
+  id: string;
+  email: string;
+  fullName?: string;
+  role?: string;
+  /** Provider-supplied avatar URL (e.g. Google). Null/absent for password users. */
+  image?: string | null;
+  provider?: string;
+};
+
 /** Build a signed session token (without touching cookies). */
-export function createSessionToken(userId: string, email: string): string {
+export function createSessionToken(user: SessionUser): string {
   const expiresAt = Date.now() + MAX_AGE_SECONDS * 1000;
-  return encodeSession({ userId, email, expiresAt });
+  return encodeSession({
+    userId: user.id,
+    email: user.email,
+    fullName: user.fullName,
+    role: user.role,
+    image: user.image ?? undefined,
+    provider: user.provider,
+    expiresAt,
+  });
 }
 
 export type SessionPayload = {
   userId: string;
   email: string;
+  fullName?: string;
+  role?: string;
+  image?: string;
+  provider?: string;
   expiresAt: number; // epoch ms
 };
 
@@ -70,8 +95,8 @@ export function decodeSession(
   }
 }
 
-export async function createSession(userId: string, email: string) {
-  const token = createSessionToken(userId, email);
+export async function createSession(user: SessionUser) {
+  const token = createSessionToken(user);
   const store = await cookies();
   store.set(SESSION_COOKIE_NAME, token, sessionCookieOptions());
 }
@@ -121,11 +146,61 @@ export async function getAccessToken(): Promise<string | undefined> {
   return store.get(ACCESS_TOKEN_COOKIE)?.value;
 }
 
+export async function getRefreshToken(): Promise<string | undefined> {
+  const store = await cookies();
+  return store.get(REFRESH_TOKEN_COOKIE)?.value;
+}
+
+// --- Password-reset ticket ---------------------------------------------------
+// The forgot-password OTP must NOT be verified separately (that would consume
+// it before reset-password can use it). Instead, the verified-looking code is
+// carried from the OTP step to the reset step in a short-lived httpOnly cookie
+// — never exposed in the URL.
+
+export type PasswordResetTicket = { email: string; code: string };
+
+export async function setPasswordResetTicket(ticket: PasswordResetTicket) {
+  const store = await cookies();
+  const value = Buffer.from(JSON.stringify(ticket)).toString("base64url");
+  store.set(PWRESET_COOKIE, value, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: PWRESET_MAX_AGE_SECONDS,
+  });
+}
+
+export async function getPasswordResetTicket(): Promise<PasswordResetTicket | null> {
+  const store = await cookies();
+  const raw = store.get(PWRESET_COOKIE)?.value;
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(
+      Buffer.from(raw, "base64url").toString(),
+    ) as PasswordResetTicket;
+    if (!parsed.email || !parsed.code) return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+export async function clearPasswordResetTicket() {
+  const store = await cookies();
+  store.delete(PWRESET_COOKIE);
+}
+
 export type JwtClaims = {
   sub?: string;
   email?: string;
   fullName?: string;
   role?: string;
+  provider?: string;
+  // Avatar claim names vary by provider/backend; we read whichever is present.
+  picture?: string;
+  profilePicture?: unknown;
+  image?: string;
   exp?: number;
 };
 
