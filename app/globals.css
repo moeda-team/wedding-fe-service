@@ -17,9 +17,10 @@
   --color-font-gray-primary: #737373;
   --color-white-10-opacity: #1717171a;
   --color-btn-warning: #d97706;
-  --color-bg-muted:#76717F;
+  --color-bg-muted: #76717f;
   --font-playfair: "Playfair Display", serif;
   --font-geist: "Geist", serif;
+  --color-info: #0284c7;
 }
 :root {
   --font-sans: var(--font-inter);

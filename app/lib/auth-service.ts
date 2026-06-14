@@ -65,19 +65,43 @@ export async function registerUser(
 }
 
 export async function loginUser(body: LoginRequest): Promise<AuthResponse> {
-  const res = await apiFetch<ApiEnvelope<AuthResponse>>("/v1/auth/login", {
-    method: "POST",
-    body: JSON.stringify(body),
-  });
-  return ensureAuthResponse(res.data);
-}
+  // const res = await apiFetch<ApiEnvelope<AuthResponse>>("/v1/auth/login", {
+  //   method: "POST",
+  //   body: JSON.stringify(body),
+  // });
 
+  return ensureAuthResponse(createMockAuthResponse());
+}
+export const createMockAuthResponse = (): AuthResponse => ({
+  user: {
+    id: "usr_123456",
+    fullName: "Rizky Naufal",
+    email: "rizky.naufal@example.com",
+    profilePicture: null,
+    provider: "LOCAL",
+    role: "USER",
+    emailVerified: true,
+    isTermsAccepted: true,
+    createdAt: "2026-06-14T10:00:00.000Z",
+    updatedAt: "2026-06-14T10:00:00.000Z",
+  },
+  tokens: {
+    accessToken:
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9." +
+      "eyJzdWIiOiJ1c3JfMTIzNDU2IiwiZW1haWwiOiJyaXpreS5uYXVmYWxAZXhhbXBsZS5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTc4MTQyNjQwMCwiZXhwIjoxNzgxNDMwMDAwfQ." +
+      "dummySignature123456789",
+    refreshToken: "refresh_token_123456789abcdefghijklmnopqrstuvwxyz",
+    expiresIn: 3600, // 1 hour in seconds
+  },
+});
 /**
  * Exchange a refresh token for a fresh access/refresh token pair (and the
  * current user). Throws {@link ApiError} when the refresh token is invalid or
  * revoked (typically 401/403) — the caller should then end the session.
  */
-export async function refreshTokens(refreshToken: string): Promise<AuthResponse> {
+export async function refreshTokens(
+  refreshToken: string,
+): Promise<AuthResponse> {
   const res = await apiFetch<ApiEnvelope<AuthResponse>>("/v1/auth/refresh", {
     method: "POST",
     body: JSON.stringify({ refreshToken }),
