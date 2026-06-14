@@ -1,4 +1,5 @@
 import { getDashboardStats } from "@/app/lib/dashboard-service";
+import { getPublicTemplates } from "@/app/lib/template-service";
 import HeroSection from "@/components/dashboard/hero";
 import { PageWrapper } from "@/components/layout/page-wrapper";
 import { Card2 } from "@/components/ui/card-2";
@@ -12,19 +13,27 @@ import {
 import { StatsCard } from "@/components/ui/stats-card";
 import { Archive, CheckCircle, ChevronRight, List } from "lucide-react";
 
-export default async function DashboardPage() {
-  const stats = await getDashboardStats();
+// Shown when the public templates endpoint returns nothing (e.g. no templates
+// published yet) so the carousel never renders empty.
+const FALLBACK_TEMPLATES = [
+  { id: "f1", title: "Luxury Wedding", image: "/images/template-1.png" },
+  { id: "f2", title: "Minimal Floral", image: "/images/template-2.png" },
+  { id: "f3", title: "Classic White", image: "/images/template-3.png" },
+  { id: "f4", title: "Romantic Gold", image: "/images/template-4.png" },
+  { id: "f5", title: "Rustic Bloom", image: "/images/template-5.png" },
+  { id: "f6", title: "Elegant Rose", image: "/images/template-1.png" },
+  { id: "f7", title: "Modern Mono", image: "/images/template-2.png" },
+  { id: "f8", title: "Soft Botanical", image: "/images/template-3.png" },
+];
 
-  const templates = [
-    { id: 1, title: "Luxury Wedding", image: "/images/template-1.png" },
-    { id: 2, title: "Minimal Floral", image: "/images/template-2.png" },
-    { id: 3, title: "Classic White", image: "/images/template-3.png" },
-    { id: 4, title: "Romantic Gold", image: "/images/template-4.png" },
-    { id: 5, title: "Rustic Bloom", image: "/images/template-5.png" },
-    { id: 6, title: "Elegant Rose", image: "/images/template-1.png" },
-    { id: 7, title: "Modern Mono", image: "/images/template-2.png" },
-    { id: 8, title: "Soft Botanical", image: "/images/template-3.png" },
-  ];
+export default async function DashboardPage() {
+  const [stats, publicTemplates] = await Promise.all([
+    getDashboardStats(),
+    getPublicTemplates(),
+  ]);
+
+  const templates =
+    publicTemplates.length > 0 ? publicTemplates : FALLBACK_TEMPLATES;
 
   return (
     <PageWrapper title="">

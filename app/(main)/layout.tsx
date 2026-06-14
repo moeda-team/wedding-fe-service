@@ -1,6 +1,10 @@
 import { redirect } from "next/navigation";
 
 import { getCurrentUser, roleLabel } from "@/app/lib/current-user";
+import {
+  getNotifications,
+  getUnreadCount,
+} from "@/app/lib/notification-service";
 import { Topbar } from "@/components/layout/topbar";
 import { Sidebar } from "@/components/ui/sidebar";
 import { avatarCandidates } from "@/lib/avatar";
@@ -13,6 +17,11 @@ export default async function MainLayout({
   const user = await getCurrentUser();
   // The middleware already guards these routes; this is a defensive fallback.
   if (!user) redirect("/login");
+
+  const [notifications, unreadCount] = await Promise.all([
+    getNotifications(),
+    getUnreadCount(),
+  ]);
 
   return (
     <div className="flex bg-[#F5F5F5]">
@@ -30,6 +39,8 @@ export default async function MainLayout({
             provider: user.provider ?? undefined,
             size: 80,
           })}
+          notifications={notifications}
+          unreadCount={unreadCount}
         />
 
         {/* PAGE CONTENT */}
