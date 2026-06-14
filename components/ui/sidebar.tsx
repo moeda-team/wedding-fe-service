@@ -10,7 +10,7 @@ import { Button } from "./button";
 
 export const navItems: NavItem[] = [
   { label: "Beranda", href: "/dashboard", icon: Home },
-  { label: "To Do List", href: "/todo", icon: ListTodo },
+  { label: "To Do List", href: "/todo", icon: ListTodo, title: "To Do List" },
   { label: "Undangan Digital", href: "/invitation", icon: Mail },
   { label: "Transaksi", href: "/transaction", icon: Wallet },
 ];
