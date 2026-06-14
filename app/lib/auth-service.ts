@@ -65,12 +65,12 @@ export async function registerUser(
 }
 
 export async function loginUser(body: LoginRequest): Promise<AuthResponse> {
-  // const res = await apiFetch<ApiEnvelope<AuthResponse>>("/v1/auth/login", {
-  //   method: "POST",
-  //   body: JSON.stringify(body),
-  // });
+  const res = await apiFetch<ApiEnvelope<AuthResponse>>("/v1/auth/login", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
 
-  return ensureAuthResponse(createMockAuthResponse());
+  return ensureAuthResponse(res.data);
 }
 export const createMockAuthResponse = (): AuthResponse => ({
   user: {
