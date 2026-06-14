@@ -1,10 +1,12 @@
 "use client";
 
-import { ArrowLeft, Bell, LogOut, User } from "lucide-react";
+import { ArrowLeft, LogOut, User } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 import { logout } from "@/app/lib/auth-actions";
+import type { NotificationDTO } from "@/app/lib/notification-service";
+import { NotificationBell } from "@/components/layout/notification-bell";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,9 +22,17 @@ type TopbarProps = {
   roleLabel: string;
   /** Ordered avatar URLs to try (Google photo first, Gravatar last). */
   avatarSrcs: string[];
+  notifications: NotificationDTO[];
+  unreadCount: number;
 };
 
-export function Topbar({ user, roleLabel, avatarSrcs }: TopbarProps) {
+export function Topbar({
+  user,
+  roleLabel,
+  avatarSrcs,
+  notifications,
+  unreadCount,
+}: TopbarProps) {
   const pathname = usePathname();
   const [pending, setPending] = useState(false);
 
@@ -55,12 +65,10 @@ export function Topbar({ user, roleLabel, avatarSrcs }: TopbarProps) {
       </div>
 
       <div className="flex items-center gap-3">
-        <button
-          aria-label="Notifikasi"
-          className="rounded-full p-2 transition hover:bg-[#f4f1ef]"
-        >
-          <Bell size={20} />
-        </button>
+        <NotificationBell
+          initialNotifications={notifications}
+          initialUnread={unreadCount}
+        />
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

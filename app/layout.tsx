@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Inter, Playfair_Display } from "next/font/google";
+import { Geist, Outfit, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const outfit = Outfit({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-outfit",
 });
 
 const geist = Geist({
@@ -32,7 +32,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`
-          ${inter.variable}
+          ${outfit.variable}
           ${geist.variable}
           ${playfair.variable}
           bg-white

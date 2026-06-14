@@ -23,7 +23,7 @@
   --color-info: #0284c7;
 }
 :root {
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-outfit);
   --font-serif: var(--font-playfair);
   --font-geist: var(--font-geist);
   --background: oklch(1 0 0);
