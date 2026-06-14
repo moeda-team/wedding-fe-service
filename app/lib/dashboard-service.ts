@@ -7,11 +7,12 @@ type ApiEnvelope<T> = {
   data: T;
 };
 
-type InvitationStatus = "DRAFT" | "PENDING_PAYMENT" | "ACTIVE";
-
-type Invitation = {
-  id: string;
-  status: InvitationStatus;
+// Shape returned by GET /v1/invitations/stats (counts computed in the DB).
+type InvitationStats = {
+  total: number;
+  draft: number;
+  pendingPayment: number;
+  active: number;
 };
 
 export type DashboardStats = {
@@ -26,7 +27,10 @@ export type DashboardStats = {
 const EMPTY_STATS: DashboardStats = { total: 0, pending: 0, active: 0 };
 
 /**
- * Aggregate the signed-in user's invitations into the dashboard counters.
+ * Fetch the signed-in user's dashboard counters.
+ *
+ * Backed by GET /v1/invitations/stats, which aggregates counts by status in a
+ * single grouped query (no row scanning, no perPage cap).
  *
  * Render-safe: any failure (including an expired token during a Server
  * Component render, where cookies can't be rewritten) degrades to zeros rather
@@ -35,20 +39,17 @@ const EMPTY_STATS: DashboardStats = { total: 0, pending: 0, active: 0 };
  */
 export async function getDashboardStats(): Promise<DashboardStats> {
   try {
-    const res = await authFetch<ApiEnvelope<Invitation[]>>(
-      "/v1/invitations?perPage=100",
+    const res = await authFetch<ApiEnvelope<InvitationStats>>(
+      "/v1/invitations/stats",
     );
-    const list = Array.isArray(res?.data) ? res.data : [];
+    const stats = res?.data;
+    if (!stats) return { ...EMPTY_STATS };
 
-    return list.reduce<DashboardStats>(
-      (acc, inv) => {
-        acc.total += 1;
-        if (inv.status === "PENDING_PAYMENT") acc.pending += 1;
-        else if (inv.status === "ACTIVE") acc.active += 1;
-        return acc;
-      },
-      { ...EMPTY_STATS },
-    );
+    return {
+      total: stats.total ?? 0,
+      pending: stats.pendingPayment ?? 0,
+      active: stats.active ?? 0,
+    };
   } catch {
     return { ...EMPTY_STATS };
   }
