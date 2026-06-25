@@ -210,7 +210,7 @@ export function InvitationPreview2({
   };
 
   return (
-    <div style={styles.root}>
+    <div className="bg-[#120707] text-[#eae6df] font-serif min-h-screen selection:bg-[#c5a880] selection:text-black">
       {/* ── Google Fonts ───────────────────────────────────────────────── */}
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link

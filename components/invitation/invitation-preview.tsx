@@ -1,3 +1,4 @@
+"use client";
 import {
   InvitationFormData,
   InvitationFormValues,
@@ -6,6 +7,7 @@ import {
 import { UseFormReturn } from "react-hook-form";
 import { InvitationPreview2 } from "./invitation-preview2";
 import { useEffect } from "react";
+import TestPage from "./test2";
 const TEMPLATES: InvitationTemplate[] = [
   {
     id: 1,
@@ -86,7 +88,7 @@ export function InvitationPreview({
   useEffect(() => {
     console.log(values.pengaturantemplate.templateId);
   }, []);
-  return values.pengaturantemplate.templateId <=3 ? (
+  return values.pengaturantemplate.templateId <= 3 ? (
     <div style={s.wrap}>
       {/* Cover */}
       <div
@@ -511,6 +513,6 @@ export function InvitationPreview({
       </div>
     </div>
   ) : (
-    <InvitationPreview2 form={form} />
+    <TestPage />
   );
 }

@@ -47,7 +47,6 @@ import {
   invitationSchema,
 } from "@/types/invitation";
 import { tempStorage } from "@/app/utils/tempStorage";
-import { InvitationPreview2 } from "./invitation-preview2";
 
 const defaultValues: InvitationFormValues = {
   pengaturanUndangan: {
@@ -595,7 +594,7 @@ export default function InvitationTab() {
                               key="mempelaiWanitaFoto"
                               preview={field.value}
                               id="mempelaiWanitaFoto"
-                              title="Foto Mempelai Pria"
+                              title="Foto Mempelai Wanita"
                               titleAttribute="text-xl font-medium text-font-black-primary"
                               inputProps={{
                                 name: "mempelaiWanitaFoto",
