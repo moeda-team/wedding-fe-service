@@ -30,6 +30,10 @@ export interface InvitationTemplate {
   name: string;
   accent: string;
   bg: string;
+  bgCard?: string;
+  bgSection?: string;
+  fontColor?: string;
+  textMuted?: string;
   fontTitle: string;
   style: "elegant" | "modern" | "rustic";
 }
@@ -50,6 +54,7 @@ export const invitationSchema = z.object({
     namaAyah: z.string(),
     namaIbu: z.string(),
     usernameInstagram: z.string().optional(),
+    fotoUrl: z.string().optional(),
   }),
   mempelaiWanita: z.object({
     namaPanggilan: z.string(),
@@ -57,6 +62,7 @@ export const invitationSchema = z.object({
     namaAyah: z.string(),
     namaIbu: z.string(),
     usernameInstagram: z.string().optional(),
+    fotoUrl: z.string().optional(),
   }),
 });
 

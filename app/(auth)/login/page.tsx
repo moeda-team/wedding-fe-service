@@ -13,6 +13,8 @@ const ERROR_MESSAGES: Record<string, string> = {
   google_state: "Sesi login tidak valid. Silakan coba lagi.",
   google_no_email: "Akun Google tidak memiliki email yang dapat digunakan.",
   google_failed: "Gagal masuk dengan Google. Silakan coba lagi.",
+  google_email_conflict:
+    "Email ini sudah terdaftar menggunakan email & kata sandi. Silakan masuk dengan metode tersebut.",
 };
 
 const NOTICE_MESSAGES: Record<string, string> = {

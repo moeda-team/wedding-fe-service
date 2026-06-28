@@ -1,95 +1,62 @@
-import InvitationTab from "@/components/invitation/invitation-tab";
+"use client";
 import { PageWrapper } from "@/components/layout/page-wrapper";
 import { Button } from "@/components/ui/button";
 import {
-  Combobox,
-  ComboboxContent,
-  ComboboxInput,
-  ComboboxEmpty,
-  ComboboxItem,
-  ComboboxList,
-} from "@/components/ui/combobox";
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
-import UploadPhotoCard from "@/components/ui/upload-photo-card";
-import { MailOpen, Users } from "lucide-react";
+  CheckCircle,
+  CheckCircle2,
+  CheckLineIcon,
+  Link,
+  MailOpen,
+  Paintbrush,
+  Pencil,
+  PlusCircle,
+  Users,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function InvitationListPage() {
+  const router = useRouter();
   const User = "Komang & Kayla";
-  const titleDesc = `Kelola Undangan Digital: ${User}`;
-  const templates = [
+  const titleDesc = ` Langkah-Langkah Buat Undangan Digital`;
+  const listUndangan = [
     {
       id: 1,
-      title: "Luxury Wedding",
-      description: "Elegant wedding invitation",
-      image: "/images/template-1.png",
+      pria: "Komang",
+      wanita: "Kayla",
+      createdAt: "2023-06-14T10:00:00.000Z",
+      updatedAt: "2023-06-14T10:00:00.000Z",
+      totalGuest: 20,
+      totalLinke: 18,
     },
     {
       id: 2,
-      title: "Minimal Floral",
-      description: "Soft and modern floral style",
-      image: "/images/template-2.png",
+      pria: "Komang",
+      wanita: "Kayla",
+      createdAt: "2023-06-14T10:00:00.000Z",
+      updatedAt: "2023-06-14T10:00:00.000Z",
+      totalGuest: 20,
+      totalLinke: 18,
     },
     {
       id: 3,
-      title: "Classic White",
-      description: "Simple classy invitation",
-      image: "/images/template-3.png",
-    },
-    {
-      id: 4,
-      title: "Romantic Gold",
-      description: "Luxury gold themed design",
-      image: "/images/template-4.png",
-    },
-    {
-      id: 5,
-      title: "Rustic Bloom",
-      description: "Warm botanical aesthetics",
-      image: "/images/template-5.png",
-    },
-    {
-      id: 6,
-      title: "Luxury Wedding",
-      description: "Elegant wedding invitation",
-      image: "/images/template-1.png",
-    },
-    {
-      id: 7,
-      title: "Minimal Floral",
-      description: "Soft and modern floral style",
-      image: "/images/template-2.png",
-    },
-    {
-      id: 8,
-      title: "Classic White",
-      description: "Simple classy invitation",
-      image: "/images/template-3.png",
-    },
-    {
-      id: 9,
-      title: "Romantic Gold",
-      description: "Luxury gold themed design",
-      image: "/images/template-4.png",
-    },
-    {
-      id: 10,
-      title: "Rustic Bloom",
-      description: "Warm botanical aesthetics",
-      image: "/images/template-5.png",
+      pria: "Komang",
+      wanita: "Kayla",
+      createdAt: "2023-06-14T10:00:00.000Z",
+      updatedAt: "2023-06-14T10:00:00.000Z",
+      totalGuest: 20,
+      totalLinke: 18,
     },
   ];
-  const musics = ["tst", "komang gahar"];
   return (
     <PageWrapper title="">
       <div className="font-geist">
@@ -97,32 +64,108 @@ export default function InvitationListPage() {
           <h1 className="text-2xl font-semibold text-font-black-primary">
             {titleDesc}
           </h1>
-          <Button
-            className="ms-auto bg-btn-warning w-44 h-12"
-            size={"lg"}
-            color="#d97706"
-          >
-            Belum Bayar
-          </Button>
         </div>
-        <h1 className="text-font-gray-primary text-xl">
-          Atur desain, isi informasi, tambahkan tamu, dan siapkan undangan untuk
-          dibagikan.
-        </h1>
-        <section>
-          <Tabs defaultValue="undangan">
-            <TabsList variant="line">
-              <TabsTrigger value="undangan">
-                <MailOpen></MailOpen> Undangan
-              </TabsTrigger>
-              <TabsTrigger value="tamu">
-                <Users></Users> Tamu
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="undangan">
-              <InvitationTab></InvitationTab>
-            </TabsContent>
-          </Tabs>
+
+        <p className="text-font-gray-primary">
+          Ikuti 3 langkah mudah untuk mmebuat undangan digital
+        </p>
+        <section id="step-card">
+          <div className="grid grid-cols-3 gap-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>Card Title</CardTitle>
+                <CardDescription>Card Description</CardDescription>
+                <CardAction>Card Action</CardAction>
+              </CardHeader>
+              <CardContent>
+                <p>Card Content</p>
+              </CardContent>
+              <CardFooter>
+                <p>Card Footer</p>
+              </CardFooter>
+            </Card>{" "}
+            <Card>
+              <CardHeader>
+                <CardTitle>Card Title</CardTitle>
+                <CardDescription>Card Description</CardDescription>
+                <CardAction>Card Action</CardAction>
+              </CardHeader>
+              <CardContent>
+                <p>Card Content</p>
+              </CardContent>
+              <CardFooter>
+                <p>Card Footer</p>
+              </CardFooter>
+            </Card>{" "}
+            <Card>
+              <CardHeader>
+                <CardTitle>Card Title</CardTitle>
+                <CardDescription>Card Description</CardDescription>
+                <CardAction>Card Action</CardAction>
+              </CardHeader>
+              <CardContent>
+                <p>Card Content</p>
+              </CardContent>
+              <CardFooter>
+                <p>Card Footer</p>
+              </CardFooter>
+            </Card>
+          </div>
+          <br></br>
+          <div className="flex w-full ">
+            <div className="rounded-lg bg-white flex flex-row p-4  w-full">
+              <div className="flex-col my-auto ">
+                <h1>Rp. 89000 / undangan</h1>
+                <p>Sekali bayar untuk 1 proyek undangan</p>
+              </div>
+              <hr className="h-14 border-r-2 mx-4" />
+              <div className="flex my-auto p-2 mx-2 bg-pink-primary2 rounded-xl">
+                <CheckCircle2 />
+                <p>Berlaku Selamanya</p>
+              </div>
+              <div className="flex my-auto p-2 mx-2 bg-pink-primary2 rounded-xl">
+                <Pencil />
+                <p>Bebas ubah data</p>
+              </div>{" "}
+              <div className="flex my-auto p-2 mx-2 bg-pink-primary2 rounded-xl">
+                <Link />
+                <p>Link tamu unlimited</p>
+              </div>{" "}
+              <div className="flex my-auto p-2 mx-2 bg-pink-primary2 rounded-xl">
+                <Paintbrush />
+                <p>Tanpa Watermark</p>
+              </div>
+              <div className="flex ms-auto my-auto">
+                <Button className="bg-pink-primary text-white">
+                  <PlusCircle /> Buat Undangan Baru
+                </Button>
+              </div>
+            </div>
+          </div>
+          <h1>Undangan Saya</h1>
+          <p>Kelola semua undangan anda</p>
+          {listUndangan.map((item) => (
+            <div className="flex w-full my-2 ">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Card Title</CardTitle>
+                  <CardDescription>Card Description</CardDescription>
+                  <CardAction>Card Action</CardAction>
+                </CardHeader>
+                <CardContent>
+                  <p>Card Content</p>
+                </CardContent>
+                <CardFooter>
+                  <Button
+                    onClick={() => router.push(`/invitation/${item.id}`)}
+                    className="bg-black text-white "
+                  >
+                    <Pencil /> Kelola Undangan
+                  </Button>
+                </CardFooter>
+              </Card>
+            </div>
+          ))}
         </section>
       </div>
     </PageWrapper>

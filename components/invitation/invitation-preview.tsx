@@ -1,9 +1,13 @@
+"use client";
 import {
   InvitationFormData,
   InvitationFormValues,
   InvitationTemplate,
 } from "@/types/invitation";
 import { UseFormReturn } from "react-hook-form";
+import { InvitationPreview2 } from "./invitation-preview2";
+import { useEffect } from "react";
+import TestPage from "./test2";
 const TEMPLATES: InvitationTemplate[] = [
   {
     id: 1,
@@ -26,30 +30,6 @@ const TEMPLATES: InvitationTemplate[] = [
     name: "Golden",
     accent: "#b8860b",
     bg: "#fffdf0",
-    fontTitle: "Georgia, serif",
-    style: "elegant",
-  },
-  {
-    id: 4,
-    name: "Rustic",
-    accent: "#6b4226",
-    bg: "#faf4ee",
-    fontTitle: "Georgia, serif",
-    style: "rustic",
-  },
-  {
-    id: 5,
-    name: "Minimalist",
-    accent: "#555",
-    bg: "#fafafa",
-    fontTitle: "'Helvetica', sans-serif",
-    style: "modern",
-  },
-  {
-    id: 6,
-    name: "Blossom",
-    accent: "#d4547a",
-    bg: "#fff5f8",
     fontTitle: "Georgia, serif",
     style: "elegant",
   },
@@ -105,14 +85,16 @@ export function InvitationPreview({
       margin: "16px 0",
     } as React.CSSProperties,
   };
-
-  return (
+  useEffect(() => {
+    console.log(values.pengaturantemplate.templateId);
+  }, []);
+  return values.pengaturantemplate.templateId <= 3 ? (
     <div style={s.wrap}>
       {/* Cover */}
       <div
         style={{
           minHeight: 240,
-          background: `linear-gradient(160deg, ${tpl.accent}22 0%, ${tpl.bg} 100%)`,
+          backgroundImage: ``,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -530,5 +512,7 @@ export function InvitationPreview({
         </div>
       </div>
     </div>
+  ) : (
+    <TestPage />
   );
 }

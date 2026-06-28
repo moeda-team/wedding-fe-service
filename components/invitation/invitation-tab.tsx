@@ -1,6 +1,11 @@
 "use client";
 import { Check, ChevronDown, Clock, RefreshCcw } from "lucide-react";
-import { useForm, Controller, FieldPath } from "react-hook-form";
+import {
+  useForm,
+  Controller,
+  FieldPath,
+  ControllerRenderProps,
+} from "react-hook-form";
 import { Button } from "../ui/button";
 import {
   Popover,
@@ -33,10 +38,15 @@ import {
   CollapsibleTrigger,
 } from "../ui/collapsible";
 import { DatePicker } from "../ui/date-picker";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { InvitationPreview } from "./invitation-preview";
-import { InvitationFormValues, invitationSchema } from "@/types/invitation";
+import {
+  InvitationFormData,
+  InvitationFormValues,
+  invitationSchema,
+} from "@/types/invitation";
+import { tempStorage } from "@/app/utils/tempStorage";
 
 const defaultValues: InvitationFormValues = {
   pengaturanUndangan: {
@@ -66,6 +76,30 @@ const defaultValues: InvitationFormValues = {
 
 export default function InvitationTab() {
   const [previewKey, setPreviewKey] = useState(1);
+  const [previewPhotoMempelaiPria, setPreviewPhotoMempelaiPria] = useState<
+    string | null
+  >(null);
+  const [previewPhotoMempelaiWanita, setPreviewPhotoMempelaiWanita] = useState<
+    string | null
+  >(null);
+  // Load saat mount
+
+  const handlePhotoChange = async (
+    keyForm: FieldPath<InvitationFormValues>,
+    keyPhoto: string,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64 = reader.result as string;
+      form.setValue(keyForm, base64);
+      tempStorage.savePhoto(keyPhoto, base64);
+    };
+    reader.readAsDataURL(file);
+  };
 
   const templates = [
     {
@@ -99,6 +133,12 @@ export default function InvitationTab() {
       description: "Warm botanical aesthetics",
       image: "/images/template-5.png",
     },
+    {
+      id: 6,
+      title: "Rustic Bloom",
+      description: "Warm botanical aesthetics",
+      image: "/images/template-6.png",
+    },
   ];
 
   const musics = ["tst", "komang gahar"];
@@ -125,6 +165,7 @@ export default function InvitationTab() {
     "mempelaiWanita.namaIbu",
     "mempelaiWanita.usernameInstagram",
   ];
+
   return (
     <div className="flex">
       <div className="grid grid-cols-2 gap-2">
@@ -147,7 +188,7 @@ export default function InvitationTab() {
                         variant="ghost"
                         className="ms-auto h-14 w-14 bg-pink-primary2 border border-pink-primary2"
                       >
-                        <ChevronDown className="!h-10 !w-10 text-font-gray-primary" />
+                        <ChevronDown className="h-10! w-10! text-font-gray-primary" />
                       </Button>
                     </CollapsibleTrigger>
                   </div>
@@ -267,7 +308,7 @@ export default function InvitationTab() {
                         variant="ghost"
                         className="ms-auto h-14 w-14 bg-pink-primary2 border border-pink-primary2"
                       >
-                        <ChevronDown className="!h-10 !w-10 text-font-gray-primary" />
+                        <ChevronDown className="h-10! w-10! text-font-gray-primary" />
                       </Button>
                     </CollapsibleTrigger>
                   </div>
@@ -297,7 +338,6 @@ export default function InvitationTab() {
                                   key={template.id}
                                   onClick={() => {
                                     field.onChange(template.id);
-
                                     // Only keep this if previewKey is numeric
                                     setPreviewKey(template.id);
                                   }}
@@ -319,7 +359,7 @@ export default function InvitationTab() {
                                     )}
                                   >
                                     <img
-                                      className="w-full aspect-[9/16] object-cover rounded-lg "
+                                      className="w-full aspect-9/16 object-cover rounded-lg "
                                       src={template.image}
                                       alt={template.title}
                                     />
@@ -400,7 +440,7 @@ export default function InvitationTab() {
                         variant="ghost"
                         className="ms-auto h-14 w-14 bg-pink-primary2"
                       >
-                        <ChevronDown className="!h-10 !w-10 text-font-gray-primary" />
+                        <ChevronDown className="h-10! w-10! text-font-gray-primary" />
                       </Button>
                     </CollapsibleTrigger>
                   </div>
@@ -458,16 +498,31 @@ export default function InvitationTab() {
                             "Nama Lengkap",
                             "Nama Ayah",
                             "Nama Ibu",
-                          ].map((label) => (
-                            <div key={label}>
-                              <Label className="text-sm font-medium">
-                                {label}
-                              </Label>
-                              <Input
-                                placeholder={label}
-                                className="mt-1 bg-white"
-                              />
-                            </div>
+                          ].map((label, index) => (
+                            <Controller
+                              key={index}
+                              control={form.control}
+                              name={mempelaiWanitaFormLabel[index]}
+                              render={({ field }) => (
+                                <FormItem>
+                                  <div key={label}>
+                                    <FormLabel className="text-sm font-medium">
+                                      {label}
+                                    </FormLabel>
+                                    <FormControl>
+                                      <Input
+                                        placeholder={label}
+                                        type="string"
+                                        className="mt-1 bg-white"
+                                        onChange={(e) => {
+                                          field.onChange(e.target.value);
+                                        }}
+                                      />
+                                    </FormControl>
+                                  </div>
+                                </FormItem>
+                              )}
+                            />
                           ))}
                         </div>
                       </TabsContent>
@@ -490,7 +545,7 @@ export default function InvitationTab() {
                         variant="ghost"
                         className="ms-auto h-14 w-14 bg-white"
                       >
-                        <ChevronDown className="!h-10 !w-10 text-font-gray-primary" />
+                        <ChevronDown className="h-10! w-10! text-font-gray-primary" />
                       </Button>
                     </CollapsibleTrigger>
                   </div>
@@ -498,14 +553,65 @@ export default function InvitationTab() {
                     <p className="font-normal text-lg text-font-gray-primary">
                       Atur tampilan cover undangan anda
                     </p>
-                    <UploadPhotoCard
-                      title="Foto Mempelai Pria"
-                      titleAttribute="text-xl font-medium text-font-black-primary"
+                    <Controller
+                      control={form.control}
+                      name="mempelaiPria.fotoUrl"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <UploadPhotoCard
+                              key="mempelaiPriaFoto"
+                              id="mempelaiPriaFoto"
+                              preview={field.value}
+                              title="Foto Mempelai Pria"
+                              titleAttribute="text-xl font-medium text-font-black-primary"
+                              inputProps={{
+                                name: "mempelaiPriaFoto",
+                                required: true,
+                                multiple: false,
+                                onChange: (e) => {
+                                  handlePhotoChange(
+                                    "mempelaiPria.fotoUrl",
+                                    "mempelaiPriaFoto",
+                                    e,
+                                  );
+                                },
+                              }}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
                     />
+
                     <br />
-                    <UploadPhotoCard
-                      title="Foto Mempelai Wanita"
-                      titleAttribute="text-xl font-medium text-font-black-primary"
+                    <Controller
+                      control={form.control}
+                      name="mempelaiWanita.fotoUrl"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <UploadPhotoCard
+                              key="mempelaiWanitaFoto"
+                              preview={field.value}
+                              id="mempelaiWanitaFoto"
+                              title="Foto Mempelai Wanita"
+                              titleAttribute="text-xl font-medium text-font-black-primary"
+                              inputProps={{
+                                name: "mempelaiWanitaFoto",
+                                required: true,
+                                multiple: false,
+                                onChange: (e) => {
+                                  handlePhotoChange(
+                                    "mempelaiWanita.fotoUrl",
+                                    "mempelaiWanitaFoto",
+                                    e,
+                                  );
+                                },
+                              }}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
                     />
                     <div className="mb-4">
                       <h1 className="text-xl text-font-black-primary font-semibold mb-4">
@@ -611,7 +717,7 @@ export default function InvitationTab() {
                     Cerita Kami
                   </Label>
                   <Button variant="ghost" className="ms-auto h-14 w-14">
-                    <ChevronDown className="!h-10 !w-10 text-font-gray-primary" />
+                    <ChevronDown className="h-10! w=10! text-font-gray-primary" />
                   </Button>
                 </div>
                 <p className="font-normal text-lg text-font-gray-primary">
@@ -619,6 +725,7 @@ export default function InvitationTab() {
                   ini.
                 </p>
                 <UploadPhotoCard
+                  id="background-story-field"
                   title="Background Section Cerita (Optional)"
                   titleAttribute="text-lg text-font-black-primary font-semibold"
                 />
@@ -653,7 +760,7 @@ export default function InvitationTab() {
                     Galeri Foto
                   </Label>
                   <Button variant="ghost" className="ms-auto h-14 w-14">
-                    <ChevronDown className="!h-10 !w-10 text-font-gray-primary" />
+                    <ChevronDown className="h-10! w=10! text-font-gray-primary" />
                   </Button>
                 </div>
                 <p className="font-normal text-lg text-font-gray-primary">
