@@ -20,12 +20,23 @@
   --color-bg-muted: #76717f;
   --font-playfair: "Playfair Display", serif;
   --font-geist: "Geist", serif;
+  --font-instrument: "Instrument Serif", serif;
   --color-info: #0284c7;
+  --color-purple-font: #84767c;
+  --color-purple-primary: #73515f;
+  --color-purple-secondary: #7d616d;
+  --color-dark-purple: #12060b;
+  --color-yellow-primary: #c8a062;
+  --color-bg-brown: #12060b;
+  --color-brown-primary: #19040c;
+  --color-brown-secondary: #1a1215;
+  --color-yellow-primary: #DBA956;
 }
 :root {
   --font-sans: var(--font-outfit);
   --font-serif: var(--font-playfair);
   --font-geist: var(--font-geist);
+  --font-instrument: var(--font-instrument);
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);

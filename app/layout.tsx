@@ -1,10 +1,20 @@
 import type { Metadata } from "next";
-import { Geist, Outfit, Playfair_Display } from "next/font/google";
+import {
+  Geist,
+  Instrument_Serif,
+  Outfit,
+  Playfair_Display,
+} from "next/font/google";
 import "./globals.css";
 
 const outfit = Outfit({
   subsets: ["latin"],
   variable: "--font-outfit",
+});
+const instrumentSherif = Instrument_Serif({
+  subsets: ["latin"],
+  variable: "--font-instrument",
+  weight: "400",
 });
 
 const geist = Geist({
@@ -35,6 +45,7 @@ export default function RootLayout({
           ${outfit.variable}
           ${geist.variable}
           ${playfair.variable}
+          ${instrumentSherif.variable}
           bg-white
           font-sans
           antialiased
